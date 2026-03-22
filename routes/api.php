@@ -19,4 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('permissions/detail', [PermissionController::class, 'show'])->name('api.permissions.show');
+Route::middleware('auth:sanctum')->get('permissions/detail', [PermissionController::class, 'show'])->name('api.permissions.show');

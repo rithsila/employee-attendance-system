@@ -48,7 +48,7 @@ class EmployeeCreateForm extends Component
             'employees.*.name' => 'required',
             'employees.*.email' => 'required|email|unique:users,email',
             'employees.*.phone' => 'required|unique:users,phone',
-            'employees.*.password' => '',
+            'employees.*.password' => 'required|min:8',
             'employees.*.role_id' => 'required|in:' . $roleIdRuleIn,
             'employees.*.position_id' => 'required|in:' . $positionIdRuleIn,
         ]);
@@ -67,7 +67,6 @@ class EmployeeCreateForm extends Component
         // alasan menggunakan create alih2 mengunakan ::insert adalah karena tidak looping untuk menambahkan created_at dan updated_at
         $affected = 0;
         foreach ($this->employees as $employee) {
-            if (trim($employee['password']) === '') $employee['password'] = '123';
             $employee['password'] = Hash::make($employee['password']);
             User::create($employee);
             $affected++;

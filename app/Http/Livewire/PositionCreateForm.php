@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\Position;
 use Livewire\Component;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class PositionCreateForm extends Component
 {

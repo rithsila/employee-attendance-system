@@ -22,6 +22,17 @@ class PresenceForm extends Component
     public function sendEnterPresence()
     {
         if ($this->attendance->data->is_start && !$this->attendance->data->is_using_qrcode) { // sama (harus) dengan view
+            // Cek apakah user sudah absen hari ini untuk attendance ini
+            $alreadyPresent = Presence::query()
+                ->where('user_id', auth()->user()->id)
+                ->where('attendance_id', $this->attendance->id)
+                ->where('presence_date', now()->toDateString())
+                ->exists();
+
+            if ($alreadyPresent) {
+                return $this->dispatchBrowserEvent('showToast', ['success' => false, 'message' => "Anda sudah melakukan absensi hari ini."]);
+            }
+
             Presence::create([
                 "user_id" => auth()->user()->id,
                 "attendance_id" => $this->attendance->id,

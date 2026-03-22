@@ -9,7 +9,10 @@ class Presence extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'user_id', 'attendance_id', 'presence_date',
+        'presence_enter_time', 'presence_out_time', 'is_permission',
+    ];
 
     public function user()
     {

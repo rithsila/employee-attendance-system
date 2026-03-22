@@ -30,6 +30,7 @@ class EmployeeController extends Controller
 
         // ambil data user yang hanya memiliki User::USER_ROLE_ID / role untuk karyawaan
         $employees = User::query()
+            ->onlyEmployees()
             ->whereIn('id', $ids)
             ->get();
 

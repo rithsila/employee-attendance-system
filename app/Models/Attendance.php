@@ -40,7 +40,7 @@ class Attendance extends Model
 
                 $isHolidayToday = Holiday::query()
                     ->where('holiday_date', now()->toDateString())
-                    ->get();
+                    ->exists();
 
                 return (object) [
                     "start_time" => $this->start_time,
@@ -51,7 +51,7 @@ class Attendance extends Model
                     "is_start" => $startTime <= $now && $batasStartTime >= $now,
                     "is_end" => $endTime <= $now && $batasEndTime >= $now,
                     'is_using_qrcode' => $this->code ? true : false,
-                    'is_holiday_today' => $isHolidayToday->isNotEmpty()
+                    'is_holiday_today' => $isHolidayToday
                 ];
             },
         );

@@ -94,7 +94,20 @@ class HomeController extends Controller
         $attendance = Attendance::query()->where('code', $code)->first();
 
         if ($attendance && $attendance->data->is_start && $attendance->data->is_using_qrcode) { // sama (harus) dengan view
-            // fix: user bisa absensi dengan tanggal yang sama, cek apakah user id attendance id dan presence date sudah ada
+            // Cek apakah user sudah absen hari ini untuk attendance ini
+            $alreadyPresent = Presence::query()
+                ->where('user_id', auth()->user()->id)
+                ->where('attendance_id', $attendance->id)
+                ->where('presence_date', now()->toDateString())
+                ->exists();
+
+            if ($alreadyPresent) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "Anda sudah melakukan absensi hari ini."
+                ], 400);
+            }
+
             Presence::create([
                 "user_id" => auth()->user()->id,
                 "attendance_id" => $attendance->id,
@@ -143,8 +156,6 @@ class HomeController extends Controller
                 "message" => "Terjadi masalah pada saat melakukan absensi."
             ], 400);
 
-        // untuk refresh if statement
-        $this->data['is_not_out_yet'] = false;
         $presence->update(['presence_out_time' => now()->toTimeString()]);
 
         return response()->json([

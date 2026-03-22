@@ -9,7 +9,10 @@ class Permission extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'user_id', 'attendance_id', 'title',
+        'description', 'permission_date', 'is_accepted',
+    ];
 
     public function user()
     {
